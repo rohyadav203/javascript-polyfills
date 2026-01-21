@@ -1,0 +1,5 @@
+{
+    "amazonQ.importRecommendationForInlineCodeSuggestions": false,
+    "amazonQ.allowFeatureDevelopmentToRunCodeAndTests": {},
+    "github.copilot.chat.agent.currentEditorContext.enabled": false
+}
