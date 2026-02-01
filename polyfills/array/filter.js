@@ -1,17 +1,37 @@
-if (Array.prototype.filter) {
-  Array.prototype.filter1 = function (callbackFn, thisArg) {
+  Array.prototype.myFilter = function (callbackFn, thisArg) {
     if (this == null || this == undefined) {
       throw new TypeError("cannot read properties of null or undefined");
     }
 
+    const ToIntegerOrInfinity = function(value) {
+      const number = Number(value);
+
+      if(isNaN(number)) {
+        return 0;
+      }
+
+      if(number === 0 || !isFinite(number)) {
+        return number;
+      }
+
+      return (typeof Math.trunc === 'function') ? Math.trunc(number) : (number < 0 ? Math.ceil(number) : Math.floor(number)); //if older browser does not have es6 as trunc is in es6
+    }
+
+    const toLength = function(value) {
+      let len = ToIntegerOrInfinity(value);
+
+      if(len <= 0) {
+        return 0;
+      }
+
+      return Math.min(len, Math.pow(2, 53) - 1);
+    }
+
     const o = Object(this);
-    const len = Math.max(
-      0,
-      Math.min(Number(o.length) || 0, Number.MAX_SAFE_INTEGER),
-    );
+    const len = toLength(o.length);
 
     if (typeof callbackFn !== "function") {
-      throw new TypeError("calllbackFn must be a function");
+      throw new TypeError("callbackFn must be a function");
     }
 
     const res = [];
@@ -27,11 +47,5 @@ if (Array.prototype.filter) {
 
     return res;
   };
-}
 
-
-const filterArr = [1, , 2, 3, 4].filter1((x) => {
-  return x > 1;
-});
-
-console.log(filterArr);
+  export {};
